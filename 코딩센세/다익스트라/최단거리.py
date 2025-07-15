@@ -43,4 +43,4 @@ while q:
         #     q.remove(idx)
         #     q.appendleft(idx)
 
-        print(dist)
+print(dist)
