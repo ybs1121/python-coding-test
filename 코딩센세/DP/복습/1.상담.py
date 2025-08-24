@@ -24,6 +24,13 @@ for i in range(N, 1, -1):
 
     max(dp[i], dp[i] + dp[i - 1])
 
-
 recur(0)
 print(dp)
+
+dp = [-1 for _ in range(N + 1)]
+
+for idx in range(N + 1)[::-1]:
+    if idx + sch[idx][0] > N:
+        dp[idx] = dp[idx + 1] # 범위를 벗어남
+
+    dp[idx] = max(dp[idx + sch[idx][0]] + sch[idx][1], dp[idx + 1])
