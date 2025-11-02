@@ -1,25 +1,21 @@
+import sys
+
+input = sys.stdin.readline
+
 n = int(input())
-nums = list(map(int, input().split()))
+numbers = list(map(int, input().split()))
 
 answer = 0
 
-for num in nums:
-    if num == 1 or num == 0:
+
+for num in numbers:
+    if num == 0 or num == 1:
         continue
-    if num == 2:
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            break
+    else:
         answer += 1
-        continue
-    else:
-        flag = True
-    if num % 2 == 0:
-        continue
-    else:
-        flag = True
-        for i in range(3, num):
-            if num % i == 0:
-                flag = False
-                break
-        if flag:
-            answer += 1
 
 print(answer)
+
