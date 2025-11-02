@@ -1,6 +1,9 @@
+import sys
+
+input = sys.stdin.readline
+
 n = int(input())
 points = []
-
 for i in range(n):
     points.append(list(map(int, input().split())))
 
