@@ -1,17 +1,15 @@
-#
+import sys
+
+input = sys.stdin.readline
 
 n = int(input())
 scores = list(map(int, input().split()))
 
+m = max(scores)
 
-max_score = max(scores)
+summary = 0
 
-if max_score == 0:
-    print(0)
+for score in scores:
+    summary += (score / m) * 100
 
-else:
-    prefix_sum = 0
-    for i in range(n):
-        prefix_sum += scores[i] / max_score * 100
-
-print(prefix_sum/n)
+print(summary / n)
