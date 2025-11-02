@@ -1,41 +1,37 @@
-import operator
+import sys
+
+input = sys.stdin.readline
 
 n = int(input())
 numbers = []
-for i in range(n):
+for _ in range(n):
     numbers.append(int(input()))
 
 numbers.sort()
 
-avg = round((sum(numbers) / n))
+# 산술평균
+print(int(round(sum(numbers) / n, 0)))
 
-mid = numbers[n // 2]
+# 중앙값
+print(numbers[n // 2])
 
-ranges = max(numbers) - min(numbers)
-
+# 최빈값
 count_dict = {}
 
-for num in numbers:
-    if num in count_dict:
-        count_dict[num] = count_dict[num] + 1
-    else:
-        count_dict[num] = 1
+for number in numbers:
+    count_dict[number] = count_dict.get(number, 0) + 1
 
 max_count = max(count_dict.values())
+candidate = []
 
-most_common_nums = []
-for num, count in count_dict.items():
-    if count == max_count:
-        most_common_nums.append(num)
+for key, value in count_dict.items():
+    if count_dict.get(key, 0) == max_count:
+        candidate.append(key)
 
-most_common_nums.sort()
-
-if len(most_common_nums) >= 2:
-    many = most_common_nums[1]
+if len(candidate) >= 2:
+    print(candidate[1])
 else:
-    many = most_common_nums[0]
+    print(candidate[0])
 
-print(avg)
-print(mid)
-print(many)
-print(ranges)
+# 범위
+print(max(numbers) - min(numbers))
