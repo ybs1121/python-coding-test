@@ -1,26 +1,21 @@
-# 알파벳이 한번 나왔다가 다른 알파벳으로 바꼈다가 다시 나올 수 없다.
+import sys
+
+input = sys.stdin.readline
 
 n = int(input())
-words = []
+answer = 0
 for i in range(n):
     word = input()
-    words.append(word)
-answer = 0
-
-
-for word in words:
-    use_chars = []
-    flag = True
-    for char in word:
-        if not use_chars or use_chars[-1] == char:
-            use_chars.append(char)
-        elif char in use_chars or 97 > ord(char)  or ord(char) > 127:
-            flag = False
-            break
+    prev = word[0]
+    for j in range(0, len(word) - 1):
+        if prev == word[j + 1]:
+            continue
         else:
-            use_chars.append(char)
-
-    if flag:
+            if prev in word[j + 1:]:
+                break
+            else:
+                prev = word[j + 1]
+    else:
         answer += 1
 
 print(answer)
