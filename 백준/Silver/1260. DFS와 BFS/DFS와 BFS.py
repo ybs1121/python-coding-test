@@ -3,50 +3,54 @@ from collections import deque
 
 input = sys.stdin.readline
 
-N, M, V = map(int, input().split())
+n, m, v = map(int, input().split())
 
+graph = {}
 
-graph = {i: [] for i in range(1, N + 1)}
-for M in range(M):
+for i in range(n + 1):
+    graph[i] = []
+
+for _ in range(m):
     a, b = map(int, input().split())
     graph[a].append(b)
     graph[b].append(a)
 
-for key in graph:
-    graph[key].sort()
+for i in range(n + 1):
+    graph[i].sort()
 
 
-dfs_visited = [False] * (N + 1)
+# DFS (깊이 탐색)
 
-
-def dfs(node, visited):
-    if visited[node]:
+def dfs(start, visited):
+    if visited[start]:
         return
+    visited[start] = True
 
-    visited[node] = True
-    print(node, end=" ")
+    print(start, end=" ")
 
-    for neighbor in graph[node]:
-        dfs(neighbor, visited)
+    for node in graph[start]:
+        dfs(node, visited)
 
 
-dfs(V, dfs_visited)
-
+dfs(v, [False] * (n + 1))
 print()
-q = deque([V])
 
-bfs_visited = [False] * (N + 1)
 
-while q:
-    node = q.popleft()
+# BFS
 
-    if bfs_visited[node]:
-        continue
+def bfs(start, visited):
+    q = deque()
+    q.append(start)
+    while q:
+        popleft = q.popleft()
 
-    print(node, end=" ")
+        if visited[popleft]:
+            continue
 
-    bfs_visited[node] = True
+        visited[popleft] = True
+        print(popleft, end=" ")
+        for node in graph[popleft]:
+            q.append(node)
 
-    for neighbor in graph[node]:
-        q.append(neighbor)
 
+bfs(v, [False] * (n + 1))
