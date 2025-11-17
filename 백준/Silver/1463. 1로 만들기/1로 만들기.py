@@ -1,12 +1,24 @@
-n = int(input())
-d = [0] * (n + 1)	
+import sys
 
-for i in range(2, n + 1):
+input = sys.stdin.readline
 
+N = int(input())
 
-    d[i] = d[i - 1] + 1
-    if i % 3 == 0:
-        d[i] = min(d[i], d[i // 3] + 1)
+dp = [0 for _ in range(N + 1)]
+
+dp[1] = 0
+
+for i in range(2, N + 1):
     if i % 2 == 0:
-        d[i] = min(d[i], d[i // 2] + 1)
-print(d[n])
+        dp[i] = min(dp[i // 2] + 1, dp[i - 1] + 1)
+
+    if i % 3 == 0:
+        dp[i] = min(dp[i // 3] + 1, dp[i - 1] + 1)
+
+    if i % 6 == 0:
+        dp[i] = min(dp[i // 2] + 1, dp[i // 3] + 1, dp[i - 1] + 1)
+
+    if i % 2 != 0 and i % 3 != 0 and i % 6 != 0:
+        dp[i] = dp[i - 1] + 1
+
+print(dp[N])
