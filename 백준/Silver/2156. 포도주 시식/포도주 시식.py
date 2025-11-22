@@ -1,13 +1,14 @@
 n = int(input())
-array = [0] * 10000
+wine = [0]
 for i in range(n):
-    array[i] = int(input())
+    wine.append(int(input()))
 
-d = [0] * 10000
-d[0] = array[0]
-d[1] = array[0] + array[1]
-d[2] = max(array[2] + array[0], array[2] + array[1], d[1])
-for i in range(3, n):
-    d[i] = max(array[i] + d[i - 2], array[i] + array[i - 1] + d[i - 3], d[i - 1])
+dp = [0] * (n + 1)
+dp[1] = wine[1]
+if n > 1:
+    dp[2] = wine[1] + wine[2]
 
-print(max(d))
+for i in range(3, n + 1):
+    dp[i] = max(dp[i - 2] + wine[i], dp[i - 1], dp[i - 3] + wine[i - 1] + wine[i])
+
+print(dp[n])
