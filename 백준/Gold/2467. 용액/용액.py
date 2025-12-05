@@ -1,32 +1,40 @@
+import sys
+
+input = sys.stdin.readline
+
 N = int(input())
+liquids = list(map(int, input().split()))
 
-liquid_list = list(map(int,input().split()))
+answer_a = liquids[0]
+answer_b = liquids[-1]
 
-liquid = 1e10
 start = 0
-end = len(liquid_list) - 1
-result_b = 0
+end = len(liquids) - 1
+
+answer = abs(answer_a + answer_b)
 
 while start < end:
 
+    mix_liquids = liquids[start] + liquids[end]
 
-    temp_liquid = liquid_list[start] + liquid_list[end]
-    if temp_liquid == 0:
-        result_a = start
-        result_b = end
+    if mix_liquids == 0:
+        answer_a = liquids[start]
+        answer_b = liquids[end]
         break
+    elif answer >= abs(mix_liquids):
+        answer = min(answer, abs(mix_liquids))
+        answer_a = liquids[start]
+        answer_b = liquids[end]
+        if mix_liquids < 0:
+            start += 1
+        else:
+            end -= 1
+    else:
+        if mix_liquids < 0:
+            start += 1
+        else:
+            end -= 1
 
-    if abs(temp_liquid) < abs(liquid):
-        # 새로운 용액이 더 0에 가까움
-        result_a = start
-        result_b = end
-        liquid = temp_liquid
-
-    if temp_liquid < 0:
-        start += 1
-    elif temp_liquid > 0:
-        end -= 1
-
-
-print(liquid_list[result_a], liquid_list[result_b], sep= " ")
-
+liquids = [answer_a, answer_b]
+liquids.sort()
+print(liquids[0], liquids[-1])
