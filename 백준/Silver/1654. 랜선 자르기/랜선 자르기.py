@@ -3,8 +3,8 @@ import sys
 input = sys.stdin.readline
 
 K, N = map(int, input().split())
-
 lines = []
+
 for _ in range(K):
     lines.append(int(input()))
 
@@ -16,14 +16,14 @@ answer = 0
 while start <= end:
     mid = (start + end) // 2
 
-    cutting = 0
+    tmp = 0
 
     for line in lines:
-        cutting += line // mid
+        tmp += line // mid
 
-    if cutting >= N:
-        answer = max(answer, mid)
+    if tmp >= N:
         start = mid + 1
+        answer = max(answer, mid)
     else:
         end = mid - 1
 
