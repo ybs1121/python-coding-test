@@ -1,36 +1,46 @@
-# n : 데이터의 크기
-n = int(input())
+import sys
 
-# plus : 양수 데이터 리스트, minus : 음수 데이터 리스트
-plus = []
-minus = []
+input = sys.stdin.readline
 
-result = 0
-for i in range(n):
-    num = int(input())
-    if num > 1:
-        plus.append(num)
-    elif num <= 0:
-        minus.append(num)
+N = int(input())
+nums = []
+for i in range(N):
+    nums.append(int(input()))
+
+# 두 짝이 양수면 곱하고
+# 두 짝이 음수면 곱하고
+# 하나가 1이면 더하고
+# 음수 * 0 이면 곱하고
+
+negative = []
+positive = []
+
+for num in nums:
+    if num > 0:
+        positive.append(num)
     else:
-        result += num
+        negative.append(num)
 
-# 정렬
-plus.sort(reverse=True)
-minus.sort() # ex) -3 -2 -1 
+negative_sum = 0
+positive_sum = 0
 
-# 양수 묶기
-for i in range(0, len(plus), 2):
-    if i+1 >= len(plus):
-        result += plus[i]
+positive.sort(reverse=True)
+negative.sort()
+
+for i in range(0, len(negative), 2):
+    if i + 1 >= len(negative):
+        negative_sum += negative[i]
     else:
-        result += (plus[i] * plus[i+1])
+        negative_sum += (negative[i] * negative[i + 1])
 
-# 음수 묶기
-for i in range(0, len(minus), 2):
-    if i+1 >= len(minus):
-        result += minus[i]
+for i in range(0, len(positive), 2):
+    if i + 1 >= len(positive):
+        positive_sum += positive[i]
     else:
-        result += (minus[i] * minus[i+1])
+        if positive[i] == 1 or positive[i + 1] == 1:
+            positive_sum += (positive[i] + positive[i + 1])
+        else:
+            positive_sum += (positive[i] * positive[i + 1])
 
-print(result)
+
+print(positive_sum + negative_sum)
