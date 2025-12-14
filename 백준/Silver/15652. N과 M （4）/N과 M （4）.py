@@ -7,21 +7,20 @@ N, M = map(int, input().split())
 answer = []
 
 
-def finder(kinds):
+def finder(arr, idx):
     global N, M
-    if len(kinds) == M:
-        answer.append(kinds)
+
+    if len(arr) == M:
+        answer.append(arr)
         return
 
-    for i in range(1, N + 1):
-        if len(kinds) != 0 and kinds[-1] > i:
-            continue
-        kinds.append(i)
-        finder(kinds + [])
-        kinds.pop()
+    for i in range(idx, N):
+        arr.append(i + 1)
+        finder(arr + [], i)
+        arr.pop()
 
-finder([])
 
-answer.sort()
+finder([], 0)
+
 for a in answer:
     print(*a)
