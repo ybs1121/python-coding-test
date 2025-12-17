@@ -1,59 +1,81 @@
-from collections import deque
 import sys
-import copy
+from itertools import combinations
+from collections import deque
 
 input = sys.stdin.readline
 
-n, m = map(int, input().split())  # 행, 열
-virus_map = [list(map(int, input().split())) for _ in range(n)]
-result = 0
+N, M = map(int, input().split())
 
-dx = [1, -1, 0, 0]
-dy = [0, 0, -1, 1]
+maps = []
+visited = [[False] * M for _ in range(N)]
+for i in range(N):
+    maps.append(list(map(int, input().split())))
+
+# 북, 동, 남, 서
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+MAX_WALL = 3
+
+answer = 0
+
+empty_spaces = []
+for i in range(N):
+    for j in range(M):
+        if maps[i][j] == 0:
+            empty_spaces.append((i, j))
 
 
-# 백트래킹으로 3개의 벽을 설치한모든 조합을 만듬
-def createWall(wall_cnt):
-    if wall_cnt == 3:
-        bfs()
+def find(cnt):
+    global answer
+
+    if cnt == MAX_WALL:
+        # 바이러스를 경로 돌고
+        # answer 업데이트
+        tmp_map = [row[:] for row in maps]
+        answer = max(bfs(tmp_map), answer)
         return
-    for x in range(n):
-        for y in range(m):
-            if virus_map[x][y] == 0:
-                virus_map[x][y] = 1
-                createWall(wall_cnt + 1)
-                virus_map[x][y] = 0
 
-            # 바이러스 전파
+    for walls in combinations(empty_spaces, 3):
+        tmp_maps = [row[:] for row in maps]
+
+        # 벽 세우기
+        for r, c in walls:
+            tmp_maps[r][c] = 1
+
+        answer = max(answer, bfs(tmp_maps))
 
 
-def bfs():
-    global result
-    wall_Arr = copy.deepcopy(virus_map)
+def bfs(maps):
     q = deque()
 
-    for x in range(n):  # 바이러스의 위치 정보 큐에 저장
-        for y in range(m):
-            if wall_Arr[x][y] == 2:
-                q.append((x, y))
+    for i in range(N):
+        for j in range(M):
+            if maps[i][j] == 2:
+                q.append((i, j))
 
     while q:
+
         x, y = q.popleft()
 
         for i in range(4):
             nx = x + dx[i]
             ny = y + dy[i]
 
-            if 0 <= nx < n and 0 <= ny < m and wall_Arr[nx][ny] == 0:
-                wall_Arr[nx][ny] = 2
-                q.append((nx, ny))
+            if 0 <= nx < N and 0 <= ny < M:
+                if maps[nx][ny] == 0:
+                    q.append((nx, ny))
+                    maps[nx][ny] = 2
 
-    # 안전지대 개수 카운팅
-    safezone = 0
-    for line in wall_Arr:
-        safezone += line.count(0)
-    result = max(safezone, result)
+    cnt = 0
+    for i in range(N):
+        for j in range(M):
+            if maps[i][j] == 0:
+                cnt += 1
+
+    return cnt
 
 
-createWall(0)
-print(result)
+find(0)
+
+print(answer)
