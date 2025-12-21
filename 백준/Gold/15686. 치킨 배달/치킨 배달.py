@@ -5,49 +5,43 @@ input = sys.stdin.readline
 N, M = map(int, input().split())
 
 maps = []
-
 for i in range(N):
-    maps.append(list(map(int, input().split())))
+    maps.append(list(map(str, input().split())))
 
 chickens = []
 houses = []
-
 for i in range(N):
     for j in range(N):
-        if maps[i][j] == 1:
-            houses.append([i, j])
-        if maps[i][j] == 2:
+        if maps[i][j] == "2":
             chickens.append([i, j])
+        if maps[i][j] == "1":
+            houses.append([i, j])
 
 answer = sys.maxsize
 
-visited = [0 for _ in range(len(chickens))]
+visited = [False] * len(chickens)
 
 
-def finder(chicken_cnt, idx):
-    global N, M, answer
+def finder(idx, cnt):
+    global answer, N, M
 
-    if chicken_cnt == M:
-
-        summary = 0
-
+    if cnt == M:
+        tmp_sum = 0
         for house in houses:
-            chicken_dist = sys.maxsize
-            for i in range(len(visited)):
-                if visited[i] == 1:
-                    tmp_dist = abs(chickens[i][0] - house[0]) + abs(chickens[i][1] - house[1])
-                    chicken_dist = min(chicken_dist, tmp_dist)
-            summary += chicken_dist
+            tmp = sys.maxsize
+            for i in range(len(chickens)):
+                if visited[i]:
+                    tmp = min(tmp, abs(chickens[i][0] - house[0]) + abs(chickens[i][1] - house[1]))
+            tmp_sum += tmp
+        answer = min(answer, tmp_sum)
 
-        answer = min(answer, summary)
+    for ch in range(idx, len(chickens)):
+        if not visited[ch]:
+            visited[ch] = True
+            finder(ch + 1, cnt + 1)
+            visited[ch] = False
 
-        return
-
-    for i in range(idx, len(chickens)):
-        if visited[i] == 0:
-            visited[i] = 1
-            finder(chicken_cnt + 1, i + 1)
-            visited[i] = 0
+    return
 
 
 finder(0, 0)
